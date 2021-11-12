@@ -48,22 +48,21 @@ def quickSort(array: list, left: int, right: int, method: str = "vanilla"):
 def quickSortPartition(array: list, left: int, right: int, method: str):
     
     if method == "vanilla":
-        pivot = array[0]
+        pivot = array[left]
 
     i = left
     j = right + 1
     while i < j:
-        while j > left and i < right:
+        while j > i:
             j -= 1
             if array[j] < pivot:
                 array[i] = array[j]
                 break
-        while i < right and j > left:
+        while i < j:
             i += 1
             if array[i] > pivot:
                 array[j] = array[i]
                 break
-
     array[j] = pivot
     return j
         
