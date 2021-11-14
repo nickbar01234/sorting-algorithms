@@ -55,9 +55,13 @@ def quickSort(array: list, left: int, right: int, method: str = "vanilla"):
 def quickSortPartition(array: list, left: int, right: int, method: str):
     '''
     Keep track of the index of next element larger than the pivot. 
-    Loop through the array from left to right, if 
+    Loop through the array from left to right, if an element is smaller
+    than the pivot, swap the smaller element with the larger element than
+    the pivot.
     '''
     
+    # If method is randomized, pick a random index in range [left, right].
+    # swap array[right] and array[random]. 
     if method == "randomized":
         random = np.random.randint(left, right + 1, 1)[0]
         array[random], array[right] = array[right], array[random]
@@ -69,6 +73,7 @@ def quickSortPartition(array: list, left: int, right: int, method: str):
             i += 1
             array[i], array[j] = array[j], array[i] 
     
+    # Swap the pivot with the next element larger than the pivot.
     array[i + 1], array[right] = pivot, array[i + 1]
 
     return i + 1
