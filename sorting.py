@@ -1,10 +1,13 @@
+'''
+Note that arrays in Python are pass by reference.
+'''
+
 #!/usr/bin/env python
 
 from utils import *
 
 import time
 import matplotlib.pyplot as plt
-import numpy as np 
 
 __all__ = ["Comparison"] 
 
@@ -22,8 +25,8 @@ class Comparison:
             sorted_array = fnc(self, kwargs["numbers"])
             end =  time.time()
             
-            #assert sorted_array == sorted(kwargs["numbers"]), \
-            #       f"{fnc.__name__} has incorrect output"
+            assert sorted_array == sorted(kwargs["numbers"]), \
+               f"{fnc.__name__} has incorrect output"
 
             if fnc.__name__ not in self.runtime:
                 self.runtime[fnc.__name__] = []
@@ -56,8 +59,7 @@ class Comparison:
     def mergeSort(self, numbers: list):
         '''
         Subdivide the array and sort the subarrays. Merge the sorted subarrays.
-        Note that arrays are passed by reference. Implementation of merge sort
-        is done in utils.py.
+        Implementation of merge sort is done in utils.py.
         '''
 
         to_sort = numbers.copy()
@@ -70,5 +72,20 @@ class Comparison:
         
         to_sort = numbers.copy()
         quickSort(to_sort, 0, len(to_sort) - 1)
+        return to_sort
+
+    @__timer
+    def quickSortRandomized(self, numbers: list):
+
+        to_sort = numbers.copy()
+        quickSort(to_sort, 0, len(to_sort) - 1, method = "randomized")
         
         return to_sort
+
+    @__timer
+    def heapSort(self, numbers: list):
+        
+        heap = MinHeap(numbers)
+
+        return heap.heapSort()
+
