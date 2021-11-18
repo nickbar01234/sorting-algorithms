@@ -100,6 +100,9 @@ class MinHeap:
 
         self.__buildHeap()
 
+    def __str__(self):
+        return str(self.array)
+
     def heapSort(self):
 
         # Pop the first element from the Heap and push into a new array.

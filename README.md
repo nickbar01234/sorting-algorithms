@@ -55,7 +55,7 @@ Activate virtual environment: `source env/bin/activate`
 
 Install pre-requisites: `pip install -r requirements.txt`
 
-Execute program: `./comparisons.py`
+Execute program: `./comparison.py`
 
 ## Code / Test
 
@@ -132,13 +132,11 @@ In fact, increasing the number of elements to around 3000 will raise a
 `maximum recursion depth` runtime error. The runtime for *quick sort* in this 
 case is $O(n^2)$. 
 
-The fastest algorithm for the sorted input case is *insertion sort*. This
-is because insertion sort is input sensitive. So the time complexity 
-in this case would be $O(n)$. However, because its runtime is so minimal, 
-it could not be plotted properly on the graph. 
-
-The second fastest algorithm is *Tim sort*, which is a combination of insertion
-sort and merge sort. 
+The fastest algorithm is *Tim sort*, which is a combination of insertion
+sort and merge sort. The second fastest algorithm is *insertion sort*, which
+is barely seen above the plotted line for *Tim sort* (zoom in for a better 
+view). This is because insertion sort is input sensitive, so given a sorted 
+input, it does minimal work. 
 
 *Merge sort*, *heapsort*, and *randomized quick sort* all have neligible differences
 in runtime. It is worth noting that in the worst case, randomized quick sort
@@ -195,13 +193,13 @@ randomly using **numpy**.
 *Insertion sort* has an expected run time of $O(n^2)$. In this test, its
 runtime is much more significant compared to other sorting algorithms.
 
-In this test *traditional quick sort* outperforms *randomized quick sort* 
+In these tests *traditional quick sort* outperforms *randomized quick sort* 
 and has similar runtime to merge sort. Even though *traditional quick sort* in
 the worst case has $O(n^2)$ time complexity, on average it performs very well. 
 *Randomized quick sort* is expected to improve the runtime of *quick sort* by
 taking advantages of the random nature of the input set. However, this may
-not be a fair test because the generated numbers are pre-determined by the 
-seed.
+not be a fair test because the generated numbers and indices chosen during
+paritioning are pre-determined by the seed.
 
 ### Small Dataset
 
