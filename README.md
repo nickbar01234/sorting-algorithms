@@ -97,9 +97,9 @@ correct (by printing) during the merge operation.
 3) Quick sort - I implemented default quick sort and randomized quick sort. For
 the default version, I used the rightmost element of the subarray as the pivot.
 I implemented the randomized version when I have ensured that the default 
-version works correctly. I used **numpy** to generate a random index in the 
-subarray and swap the value at this index and the value at the rightmost index. 
-Finally, run quicksort as normal. 
+version works correctly. For randomized quicksort, I precomuted a list 
+of random indices (0 to the length of the array) with the same size as the 
+array. Then, quicksort is executed by passing in the list of indices as pivot.
 4) Min heap - I first implemented building a heap. For the heap, I transformed
 the input set so that every element is shifted by one index (the 0-th index
 stores `None`). This simplified the math operations during `heapify`. For 
@@ -154,7 +154,7 @@ for randomized quick sort).
 sorted input"/>
 
 For this test, I ran a for loop to create inputs of 0 to 2000 elements in 
-reversed sorted order, incremeneted by 50 each time. 
+reversed sorted order, incremented by 50 each time. 
 
 The two most noticeable lines are that of *insertion sort* and *traditional
 quick sort*. For *insertion sort*, at every index, the algorithm has to traverse
@@ -166,7 +166,8 @@ gap as the input size grows larger.
 
 The runtime between *Tim sort*, *merge sort*, *heap sort*, and *randomized 
 quick sort* is neglible. The trend is very smilar to the graph for sorted
-input.
+input. However, there was a peak between the mark for 1750 to 2000 elements
+for *heap sort*; but I'm not sure what causes this.
 
 ### Heap Sort Comparison
 
@@ -195,13 +196,14 @@ randomly using **numpy**.
 *Insertion sort* has an expected run time of $O(n^2)$. In this test, its
 runtime is much more significant compared to other sorting algorithms.
 
-In these tests *traditional quick sort* outperforms *randomized quick sort* 
-and has similar runtime to merge sort. Even though *traditional quick sort* in
-the worst case has $O(n^2)$ time complexity, on average it performs very well. 
-*Randomized quick sort* is expected to improve the runtime of *quick sort* by
-taking advantages of the random nature of the input set. However, this may
-not be a fair test because the generated numbers and indices chosen during
-paritioning are pre-determined by the seed.
+In this test case, *traditional quick sort* and *randomized quick sort* have
+very similar runtime. However, it is worth noting that at the mark between 
+1500 and 1750 elements, there was a peak in runtime for *randomized quick sort* 
+(also for heap sort). Therefore, we can see that *randomized quick sort* 
+helps to optimize runtime for inputs that are sorted or reversed sorted. But
+if the distribution of the data is completely random, *traditional quick 
+sort* is a good choice. However, this can be a biased statement because
+the generated input sets and random indices were pre-determined by the seed.
 
 ### Small Dataset
 
@@ -228,10 +230,19 @@ on small input sizes.
 	<img src="graphs/500_element.png">
 </figure>
 
-Constistently throughout the different randomly generated sets, *randomized
-quick sort* and *heap sort* has the worst runtime. Therefore, we should not 
-use these two sorting algorithms on small datasets. 
+Consistently for these tests, *heap sort* has the worst runtime. Therefore,
+it should be not be used on a small dataset size. 
 
-*Traditional quick sort* outperforms *merge sort* for all this test by a 
-narrow margin. Therefore, for small datasets, either of these two algorithms
-can be a good choice.
+We see that *traditional quick sort* has the faster runtime than
+*randomized quick sort* - which supports the conclusion I've reached in 
+the previous section.
+
+*Traditional quick sort* also outperforms *merge sort* by a narrow margin. 
+Therefore, *traditional quick sort* is a good choice for small datasets. 
+
+## Takeaways 
+
+1) I learned that iterables are passed by reference.
+2) I learned to precompute the random indices to optimize randomized quick sort
+(shoutout to Peak!). 
+3) Differences in sorting algorithms (described in the previous section).

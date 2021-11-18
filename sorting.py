@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
+from collections.abc import Iterable
 
 __all__ = ["insertionSort", "mergeSortRecursion", "quickSort", "MinHeap"] 
 
@@ -50,24 +51,24 @@ def mergeSortMerge(array, left, mid, right):
     # Copy the elements in the auxilary array to the original array.
     array[left:right + 1] = aux
 
-def quickSort(array: list, left: int, right: int, method: str = "vanilla"):
-    assert method in ["vanilla", "randomized"]
+def quickSort(array: list, left: int, right: int, randomized_index: Iterable = None):
     
     # Partition the array around the pivot when left has not crossed right.
     # Recurse on the two subarrays around the partition.
     if left < right:
-        partition = quickSortPartition(array, left, right, method)
-        quickSort(array, left, partition - 1, method)
-        quickSort(array, partition + 1, right, method)
+        partition = quickSortPartition(array, left, right, randomized_index)
+        quickSort(array, left, partition - 1, randomized_index)
+        quickSort(array, partition + 1, right, randomized_index)
 
-def quickSortPartition(array: list, left: int, right: int, method: str):
+def quickSortPartition(array: list, left: int, right: int, randomized_index: Iterable):
     
-    # If method is randomized, pick a random index in range [left, right].
-    # swap array[right] and array[random]. 
-    if method == "randomized":
-        random = np.random.randint(left, right + 1, 1)[0]
+    # If an iterable of random indices is provided, then select the next item
+    # from the iterable. Compute the random index, and swap the values at 
+    # right most index with this random index.
+    if isinstance(randomized_index, Iterable):
+        random = left + next(randomized_index) % (right - left + 1) 
         array[random], array[right] = array[right], array[random]
-
+        
     pivot = array[right]
     # i keep tracks of the index before the next element that is larger than 
     # the pivot

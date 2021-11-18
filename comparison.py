@@ -12,7 +12,11 @@ from sorting import *
 import pathlib
 import time
 import matplotlib.pyplot as plt
+import numpy as np 
 
+np.random.seed(42)
+
+    
 __all__ = ["Comparison"] 
 
 class Comparison:
@@ -110,7 +114,6 @@ class Comparison:
 
         to_sort = numbers.copy()
         insertionSort(to_sort)
-        
         return to_sort
 
     @__timer
@@ -118,7 +121,6 @@ class Comparison:
 
         to_sort = numbers.copy()
         mergeSortRecursion(to_sort, 0, len(to_sort) - 1)
-
         return to_sort
 
     @__timer
@@ -132,9 +134,10 @@ class Comparison:
     def quickSortRandomized(self, numbers: list):
 
         to_sort = numbers.copy()
-        quickSort(to_sort, 0, len(to_sort) - 1, method = "randomized")
-        
-        return to_sort
+        # Precomputed randomized indices
+        randomized_index = iter(list(np.random.randint(0, len(to_sort), len(to_sort))))        
+        quickSort(to_sort, 0, len(to_sort) - 1, randomized_index)
+        return to_sort 
 
     @__timer
     def heapSort(self, numbers: list):
@@ -164,9 +167,6 @@ if __name__ == "__main__":
     If the function call returns, then the sorted output is correct. I 
     assumed that Python sorted function is implemented correctly. 
     '''
-
-    import numpy as np 
-    np.random.seed(42)
 
     sorted_case = list(range(800))
     reverse_sorted_case = list(reversed(range(800)))
