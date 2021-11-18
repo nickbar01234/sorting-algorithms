@@ -55,6 +55,8 @@ Activate virtual environment: `source env/bin/activate`
 
 Install pre-requisites: `pip install -r requirements.txt`
 
+Add permision to file: `chmod +x comparison.py`
+
 Execute program: `./comparison.py`
 
 ## Code / Test
