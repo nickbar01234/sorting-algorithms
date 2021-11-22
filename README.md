@@ -9,40 +9,49 @@ algorithms.
 I also included Python's default sorting implementation - Tim sort - for
 comparison. 
 
+## TL;DR 
+
+A few interesting observations. 
+
+1) *Tim-sort* outperformed all my implementations, so you would probably be better off using Python's default sort function. 
+2) We say that *traditional quick sort* has worst-case runtime of O(n^2), but on average, it performs very well. 
+3) For input size smaller than 50, *insertion sort* is not that bad.
+4) *Heap sort* has a small gap with *merge sort* and *quick sort* for large size inputs, but you would be better off using the heap for other purposes than sorting. 
+
 ## Algorithm Overview
 
 **Insertion sort**: 
-* Best case - $O(n)$
-* Worst case - $O(n^2)$
-* Average case - $O(n^2)$
-* Additional space complexity - $O(1)$ 
+* Best-case - O(n)
+* Worst-case - O(n^2)
+* Average-case - O(n^2)
+* Additional space complexity - O(1)
 * Input sensitive: &#x2713;
 * In-place: &#x2713;
 * Stable: &#x2713;
 
 **Merge sort**:
-* Best case - $O(nlog(n))$ 
-* Worst case - $O(nlog(n))$
-* Average case - $O(nlog(n))$ 
-* Additional space - $O(n)$
+* Best-case - O(nlog(n))
+* Worst-case - O(nlog(n))
+* Average case - O(nlog(n))
+* Additional space - O(n)
 * Input sensitive: &#x2717;
 * In-place: &#x2717;
 * Stable: &#x2713;
 
 **Quick sort**:
-* Best case - $O(nlog(n))$
-* Worst case - $O(n^2)$
-* Expected case - $O(nlog(n))$
-* Additional space - $O(1)$ 
+* Best-case - O(nlog(n))
+* Worst-case - O(n^2)
+* Expected case - O(nlog(n))
+* Additional space - O(1)
 * Input sensitive: &#x2717;
 * In-place: &#x2713;
 * Stable: &#x2717;
 
 **Heap sort**:
-* Best case - $O(nlog(n))$
-* Worst case - $O(nlog(n))$
-* Average case - $O(nlog(n))$
-* Additional space - $O(1)$ 
+* Best-case - O(nlog(n))
+* Worst-case - O(nlog(n))
+* Average-case - O(nlog(n))
+* Additional space - O(1)
 * Input sensitive: &#x2717;
 * In-place: &#x2713;
 * Stable: &#x2717;
@@ -55,194 +64,59 @@ Activate virtual environment: `source env/bin/activate`
 
 Install pre-requisites: `pip install -r requirements.txt`
 
-Add permision to file: `chmod +x comparison.py`
-
-Execute program: `./comparison.py`
-
-## Code / Test
-
-In this project, my main driver is written in **comparison.py** and the 
-sorting algorithms are implemented in **sorting.py**. 
-
-**comparison.py** executes the sorting algorithms on a given input and keep
-tracks of the runtime. To calculate the runtime, I created a decorator. When
-an algorithm is called, the initial time is recorded. After the algorithm has 
-finished executing, the final time is recorded. The difference in final and 
-initial time is the runtime of the algorithm. 
-
-Nested inside the decorator is also an assertion that the output of my 
-implementations need to equal the output of the default sorting function in 
-Python. 
-
-For all sorting algorithms, I considered 3 different type of test cases - 
-*sorted input*, *reverse sorted input*, and *randomly generated input*. The 
-first two cases can be generated using Python's `range(n)` and 
-`reversed(range(n))`, respectively. The final test case was generated using 
-**numpy** (np), `list(np.random.randint(lower bound, upper bound, number of 
-elements)`. For reproducible results, I set the seed to 42. In the randomly 
-generated input test, I ran a loop to generate a set of 0 to 999 elements. 
-This also made sure that even and odd cardinality inputs are thoroughly tested. 
-
-**sorting.py** implements *insertion sort*, *merge sort*, *quick sort*, and
-*heap sort*. 
-
-1) Insertion sort - The invariant of this algorithm ensures that at any index
-during sorting, the values at previous indices must be sorted. While 
-implementing insertion sort, at every index, I extracted the values of 
-previous indices into a list and assert that Python default sort also 
-produces the same output.
-2) Merge sort - Merge sort subdivides the array and sorts the subarrays. I 
-tested the algorithm on small inputs first to make sure my indices are
-correct (by printing) during the merge operation. 
-3) Quick sort - I implemented default quick sort and randomized quick sort. For
-the default version, I used the rightmost element of the subarray as the pivot.
-I implemented the randomized version when I have ensured that the default 
-version works correctly. For randomized quicksort, I precomuted a list 
-of random indices (0 to the length of the array) with the same size as the 
-array. Then, quicksort is executed by passing in the list of indices as pivot.
-4) Min heap - I first implemented building a heap. For the heap, I transformed
-the input set so that every element is shifted by one index (the 0-th index
-stores `None`). This simplified the math operations during `heapify`. For 
-heapifying, I used recursion. There are three base cases to consider. First,
-the current index is out of range in the heap; in this case, the function 
-returns. Second, if the children do not exist; in this case, I set the 
-children's value to `np.Inf` (positive infinity). This assumes that the 
-elements in the input set are finite numbers. Third, if both children are 
-larger, the recursion stops. The recursive case is on the smaller of the two 
-children. I used small inputs to test if the heap has been built correctly by 
-drawing out the tree representation of the output. Heap sort correctness used 
-test cases as described above. 
-
-Finally, **comparison.py** has a method to receive inputs and run all 
-the algorithms implemented and plot graphs. The graphs are displayed in 
-a Jupyter notebook. By providing a value to `output` in `__init__` method and
-`figitle` in `__call__`, you can also save the output graph!
+Tests can be ran in `sorting.ipynb`
 
 ## Analysis
 
-### Sorted Input
+### Sorted Input 
 
-<img src="graphs/sorted_input.png" alt="Time comparison for sorted input"/>
+![image](https://user-images.githubusercontent.com/74647679/142796139-f1e26ef6-c925-48da-b57b-daf693a6a602.png)
 
-For this test, I ran a for loop to create inputs of 0 to 2000 elements in 
-sorted order, incremented by 50 each time. 
+As expected, the time taken for *traditional quick sort* grew with the input size. Because my implementation used the rightmost element as the pivot, no inversions were corrected for a sorted array. The time complexity for this case is O(n^2). In fact, in my tests, input size of around 3000 would throw `RecursionError: maximum recursion depth exceeded while calling a Python object`. 
 
-As expected, the traditional implementation of *quick sort* has the longest 
-runtime as input size grows. This is because the pivot (in my implementation) 
-is always the greatest element in the subarray for a sorted input.
-In fact, increasing the number of elements to around 3000 will raise a 
-`maximum recursion depth` runtime error. The runtime for *quick sort* in this 
-case is $O(n^2)$. 
+The gap between other sorting algorithms are neligble for a sorted array. Note that although *heap sort* had no overhead work for building a min-heap in a sorted array, heapifying operation took O(log(n)) time which explained why it took the longest out of the remaining sorting algorithms. I was suprised to see the runtime between *merge sort* and *insertion sort* to be so close, since the former is **input insensitive** and the latter is **input sensitive**. My guess is that the input size was not big enough to see a difference.  
 
-The fastest algorithm is *Tim sort*, which is a combination of insertion
-sort and merge sort. The second fastest algorithm is *insertion sort*, which
-is barely seen above the plotted line for *Tim sort* (zoom in for a better 
-view). This is because insertion sort is input sensitive, so given a sorted 
-input, it does minimal work. 
+### Reverse Sorted Input
 
-*Merge sort*, *heapsort*, and *randomized quick sort* all have neligible differences
-in runtime. It is worth noting that in the worst case, randomized quick sort
-can perform as badly as traditional quick sort; however, with the current
-seed that I set, this was not the case. Heap sort has a slightly longer 
-runtime because of the overhead to set up the heap. These 3 sorting algorithms
-are input insensitive - their time complexity is $O(nlog(n))$ (expected 
-for randomized quick sort).
+![image](https://user-images.githubusercontent.com/74647679/142798824-9f3a41bf-1040-461d-bfe5-2dfd5156b683.png)
 
-### Reversed Sorted Input
+In this test, the time complexity of *traditional quick sort* and *insertion sort* was O(n^2). I had expected the gap in runtime for these algorithms to be smaller, but the graph suggested that the gap would increase as the input size grows. 
 
-<img src="graphs/reversed_sorted_input.png" alt="Time comparison for reversed
-sorted input"/>
+For a reverse sorted input, *heap sort* had an overhead work to build a min-heap. The runtime differences between *merge sort*, *randomized quick sort*, and *tim sort* were negligble. 
 
-For this test, I ran a for loop to create inputs of 0 to 2000 elements in 
-reversed sorted order, incremented by 50 each time. 
+### Heap Sort Comparison 
 
-The two most noticeable lines are that of *insertion sort* and *traditional
-quick sort*. For *insertion sort*, at every index, the algorithm has to traverse
-to start of the array. The time complexity is $O(n^2)$. For *quick sort*,
-the pivot is always the smallest in the array so only 1 inversion is corrected
-after every partition. The time complexity is $O(n^2)$. However, I expected
-both these algorithms runtime to be somewhat similar, but there's a noticeable
-gap as the input size grows larger. 
+![image](https://user-images.githubusercontent.com/74647679/142799231-e30769d4-2421-48f3-a634-057cf5d0fa99.png)
 
-The runtime between *Tim sort*, *merge sort*, *heap sort*, and *randomized 
-quick sort* is neglible. The trend is very smilar to the graph for sorted
-input. However, there was a peak between the mark for 1750 to 2000 elements
-for *heap sort*; but I'm not sure what causes this.
-
-### Heap Sort Comparison
-
-<img src="graphs/heap_comparison.png" alt="Time comparison for heap sort"/>
-
-After I have finished the sorted and reversed sorted case, it was interesting
-to see the runtime for heap sort on a sorted array and that of a reversed
-sorted array. 
-
-For a min heap, having an already sorted input means that there will be less
-overhead work when building the heap. I tested this hypothesis by generating 
-an sorted input set and a reversed sorted input set from 0 to 10000 elements
-to compare. 
-
-From the graph, the runtime on the sorted data is smaller than that of the 
-reversed sorted data. As the input size grows, it seems like the gap in 
-the runtime also grows. 
+In this test, I compared the runtime for *heap sort* on sorted inputs and reverse sorted inputs. As expected, the gap grew wider with larger input size. 
 
 ### Random Input
 
-<img src="graphs/random_input.png" alt="Time comparison for arbitrary input"/>
+![image](https://user-images.githubusercontent.com/74647679/142799335-f7b94883-e52b-45a8-94bd-bd3fb8d3bf9d.png)
 
-For this test, I ran a for loop to generate inputs of 0 to 20000 elements 
-randomly using **numpy**. 
+In this test, I used `numpy` to generate random inputs of size 0 to 2000. *Insertion sort* has an average time complexity of O(n^2), so its runtime for random sets of input were reasonable. It would be interesting to implement *shell sort* in the future to see against radom input sets; *shell sort* is a modified version of insertion sort which is expected to improve its runtime. 
 
-*Insertion sort* has an expected run time of $O(n^2)$. In this test, its
-runtime is much more significant compared to other sorting algorithms.
+Although we say that *traditional quick sort* has the worst-case time complexity of O(n^2), on average, it performs very well - O(nlog(n)). 
 
-In this test case, *traditional quick sort* and *randomized quick sort* have
-very similar runtime. However, it is worth noting that at the mark between 
-1500 and 1750 elements, there was a peak in runtime for *randomized quick sort* 
-(also for heap sort). Therefore, we can see that *randomized quick sort* 
-helps to optimize runtime for inputs that are sorted or reversed sorted. But
-if the distribution of the data is completely random, *traditional quick 
-sort* is a good choice. However, this can be a biased statement because
-the generated input sets and random indices were pre-determined by the seed.
+### Small Input
 
-### Small Dataset
+I have been told that for a small set of inputs, *heap sort* should not be used and *insertion sort* would work fine. For this test, I check the runtime of the different sorting algorithms on small sets of input from 0 to 500 elements. 
 
-In this section, I analyzed the time complexity of the sorting algorithms 
-on small input sizes.
+*Insertion sort* has neglible runtime compared to *merge sort* and *quick sort* for input size smaller than 50. I would say that it is a good choice if the given set is smaller than 50 and is not reverse sorted. From 0 to around 250 elements, *heap sort* took the longest out of all the algorithms I implemented. *Insertion sort* intersected with *heap sort* at around 250 elements. Therefore, for input size greater than 250, *insertion sort* would be a bad choice. 
 
-<figure>
-	<img src="graphs/100_element.png">
-</figure>
+*Randomized quick sort* is expected to improve the runtime for *quick sort*, but the test showed that *traditional quick sort* outperformed *randomized quick sort*. Of course, this is a pre-mature conclusion because the random indices in the randomized version were generated from a distribution in `np.seed`. In fact, *traditional quick sort* outperformed *merge sort* in this test. So for small input size, *traditional quick sort* is a good choice. 
 
-<figure>
-	<img src="graphs/200_element.png">
-</figure>
+![image](https://user-images.githubusercontent.com/74647679/142801216-79eafb14-fcf6-463c-97c0-95ccdf36a009.png)
 
-<figure>
-	<img src="graphs/300_element.png">
-</figure>
+![image](https://user-images.githubusercontent.com/74647679/142801218-1add281a-c846-4b3a-97ee-96a5353f60fa.png)
 
-<figure>
-	<img src="graphs/400_element.png">
-</figure>
+![image](https://user-images.githubusercontent.com/74647679/142801226-54305660-a2a5-4601-80ff-694ec2545003.png)
 
-<figure>
-	<img src="graphs/500_element.png">
-</figure>
+![image](https://user-images.githubusercontent.com/74647679/142801229-48c092b9-e073-49a3-a0e5-6e8bffe69505.png)
 
-Consistently for these tests, *heap sort* has the worst runtime. Therefore,
-it should be not be used on a small dataset size. 
-
-We see that *traditional quick sort* has the faster runtime than
-*randomized quick sort* - which supports the conclusion I've reached in 
-the previous section.
-
-*Traditional quick sort* also outperforms *merge sort* by a narrow margin. 
-Therefore, *traditional quick sort* is a good choice for small datasets. 
+![image](https://user-images.githubusercontent.com/74647679/142801234-80f5e629-f317-4c8c-b0ff-09d43c59c0ea.png)
 
 ## Takeaways 
 
-1) I learned that iterables are passed by reference.
-2) I learned to precompute the random indices to optimize randomized quick sort
-(shoutout to Peak!). 
-3) Differences in sorting algorithms (described in the previous section).
+1) This was realized after the fact, but for a given set of input, the same function call can have different runtime. This can be seen in the random peaks throughout the graphs. For future reference, it would be more accurate to take the average over several trials of the same imput size. 
+2) I originally computed the randomized index for *randomized quick sort* within the recursive function call, but this ended up increasing its runtime. I ended up precomputing the randomized index before calling *randomized quick sort*. This improved the runtime dramatically. 
