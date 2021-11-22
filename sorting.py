@@ -4,13 +4,12 @@ from collections.abc import Iterable
 
 __all__ = ["insertionSort", "mergeSortRecursion", "quickSort", "MinHeap"] 
 
-np.random.seed(42)
 
 def insertionSort(array: int):
 
-    # While the current value is greater than the value at the previous index. Assign
-    # the value at the previous index to the current index. After exiting while 
-    # loop, assign the value at index with current value.
+    # While the current value is greater than the value at the previous index.
+    # Assign the value at the previous index to the current index. After exiting
+    # while loop, assign the value at index with current value.
     for i in range(1, len(array)):
         current = array[i]
         while i >= 1 and current < array[i - 1]:
@@ -62,9 +61,8 @@ def quickSort(array: list, left: int, right: int, randomized_index: Iterable = N
 
 def quickSortPartition(array: list, left: int, right: int, randomized_index: Iterable):
     
-    # If an iterable of random indices is provided, then select the next item
-    # from the iterable. Compute the random index, and swap the values at 
-    # right most index with this random index.
+    # If an iterable of random indices is provided, select the next item
+    # from the iterable and swap the right most index with this random index.
     if isinstance(randomized_index, Iterable):
         random = left + next(randomized_index) % (right - left + 1) 
         array[random], array[right] = array[right], array[random]
@@ -98,7 +96,8 @@ class MinHeap:
         # Index indicates the range of values in the array to consider when
         # applying heap sort.
         self.index = len(self.array) - 1
-
+        
+        # Initialize a heap
         self.__buildHeap()
 
     def __str__(self):
