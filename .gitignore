@@ -3,4 +3,3 @@
 .*.swo 
 env/
 __pycache__/
-graphs/
